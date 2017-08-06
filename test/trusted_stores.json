@@ -1,17 +1,17 @@
 {
-  "Amazon":
+  "amazon":
     {
       "URL":"www.amazon.com/api"
     },
-    "Skroutz":
+    "skroutz":
     {
       "URL":"www.skroutz.com/api"
     },
-    "Beneton":
+    "beneton":
     {
       "URL":"www.beneton.com"
     },
-    "Foo":
+    "foo":
     {
       "URL":"www.foo.com/api"
     }

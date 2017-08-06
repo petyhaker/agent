@@ -1,0 +1,28 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Product",
+    "description": " lsgoiesg",
+    "image": "foo",
+    "name":"Moby Dick",
+    "offers": {
+      "@type": "Offer",
+      "availability": "yes",
+      "price": "55.00",
+      "priceCurrency": "USD"
+    },
+    "review": [
+      {
+      "@type": "Review",
+      "author": "Ellie",
+      "datePublished": "2011-04-01",
+      "description": "Great story but the translation was poor.",
+      "name": "Not a happy camper",
+      "reviewRating": {
+        "@type": "Rating",
+        "bestRating": "5",
+        "ratingValue": "1",
+        "worstRating": "1"
+        }
+     }
+   ]
+}
