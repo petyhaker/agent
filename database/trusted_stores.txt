@@ -1,4 +1,4 @@
-"http://www.amazon.com/api".
-"http://www.skroutz.com/api".
-"http://www.foo.com/api".
-"http://www.beneton.com".
+"http://www.amazon.com/api/".
+"http://www.skroutz.com/api/".
+"http://www.foo.com/api/".
+"http://www.beneton.com/".

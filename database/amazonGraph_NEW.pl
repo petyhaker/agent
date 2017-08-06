@@ -1,6 +1,5 @@
 path(buyProduct, basket, "http://www.amazon.com/api/basket",post).
 path(browseBasket, basket, "http://www.amazon.com/api/basket",get).
-path(checkoutBasket, basket, "http://www.amazon.com/api/basket",get).
 path(_ , search, "http://www.amazon.com/api/search",get).
 path(_, product, "http://www.amazon.com/api/product",get).
 path(_, checkout, "http://www.amazon.com/api/checkout",get).
@@ -21,7 +20,7 @@ next_state(checkoutBasket, basket,"http://www.amazon.com/api/basket", checkout).
 next_state(checkoutBasket, checkout,"http://www.amazon.com/api/checkout", payment).
 next_state(checkoutBasket, payment,"http://www.amazon.com/api/payment", end).
 next_state(browseBasket, entry,"http://www.amazon.com/api/", basket).
-next_state(browseBasket, basket,"http://www.amazon.com/api/basket", end).
+  next_state(browseBasket, basket,"http://www.amazon.com/api/basket", end).
 
 
 status_code("http://www.amazon.com/api/product", 200).

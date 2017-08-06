@@ -1,0 +1,6 @@
+
+1. find the product with the best price
+
+2. checkout - email, card number
+   postage information 
+   then send status_code(checkout, 200)
