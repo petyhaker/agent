@@ -1,9 +1,6 @@
 :- consult(read_file).
 
-%%%%%%%%%%%%%
-:- consult(database/amazonGraph_NEW).
-
-
+% here are the "calls" to get the graphs from the stores
 % replace these with actual REST calls
 getGraph("http://www.amazon.com/api/") :- consult(database/amazonGraph).
 getGraph("http://www.foo.com/api/") :- consult(database/fooGraph).
@@ -11,6 +8,7 @@ getGraph("http://www.beneton.com/")  :- consult(database/benetonGraph).
 getGraph("http://www.skroutz.com/api/") :- consult(database/skroutzGraph).
 
 % explore the availability on all stores
+% check_availability(INTENSION, URLS_LIST, ACCUMULATOR, RESULT)
 check_availability(_, [end_of_file], Result, Result).
 check_availability(Intension, [ A | URLS], Acc, X) :- getGraph(A), write(A), next_state(Intension, entry, A, State),
 																									path(Intension, State, Request, Method),
@@ -27,8 +25,6 @@ agent_inner(Intension, Request, Method, Result, Acc, State) :- path(Intension, S
 																															write(NextMethod), agent_inner(Intension, NextRequest, NextMethod, Result, [NextState | Acc], NextState), !.
 
 % starting point
+% start(INTENSION, SCOPE, RESULT) - SCOPE says to the agent whether to search all or a specific store
 start(Intension, all, Result) :- input('database/trusted_stores.txt', URLS), write(URLS), check_availability(Intension, URLS, [], Result).
-start(Intension, Store, Result) :- check_availability(Intension, [Store, end_of_file], [], Result). 
-
-
-% intention, scope(all stores or one), query(if it applies)
+start(Intension, Store, Result) :- check_availability(Intension, [Store, end_of_file], [], Result).
