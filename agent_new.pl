@@ -19,9 +19,8 @@ check_availability([A|URLS], SearchBy, Value) :- searchProduct(A, SearchBy, Valu
 
 
 % traverse the graph of 1 store
-% agent_inner(NTENSION, REQUEST, METHOD, RESULT, ACCUMULATOR, STATE)
-agent_inner(_, Request, _, Result, Result, _) :-  status_code(Request, 400).
-agent_inner(_, Request, _, Result, Result, _) :-  status_code(Request, 500).
+% agent_inner(INTENSION, REQUEST, METHOD, RESULT, ACCUMULATOR, STATE)
+
 agent_inner(Intension, Request, Method, [ end | Result], Result, _) :-path(Intension, State, Request, Method), next_state(Intension, State, Request,  end), !.
 agent_inner(Intension, Request, Method, Result, Acc, State) :- path(Intension, State, Request, Method), status_code(Request,200), write(State),
 																															next_state(Intension, State, Request, NextState), path(Intension, NextState, NextRequest, NextMethod),

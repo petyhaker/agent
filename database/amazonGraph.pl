@@ -1,10 +1,12 @@
-path(buyProduct, basket, "http://www.amazon.com/api/basket",post).
-path(browseBasket, basket, "http://www.amazon.com/api/basket",get).
-path(checkoutBasket, basket, "http://www.amazon.com/api/basket",get).
-path(_ , search, "http://www.amazon.com/api/search",get).
-path(_, product, "http://www.amazon.com/api/product",get).
-path(_, checkout, "http://www.amazon.com/api/checkout",get).
-path(_, payment, "http://www.amazon.com/api/payment",post).
+path(buyProduct, basket, "http://www.amazon.com/api/basket",post, ["usename", "password"]).
+path(browseBasket, basket, "http://www.amazon.com/api/basket",get, ["usename", "password"]).
+path(checkoutBasket, basket, "http://www.amazon.com/api/basket",get, ["usename", "password"]).
+path(_ , search, "http://www.amazon.com/api/search",get, ["name"]).
+path(_, product, "http://www.amazon.com/api/product",get, ["productId"]).
+path(_, checkout, "http://www.amazon.com/api/checkout",get, ["basketId"]).
+path(_, payment, "http://www.amazon.com/api/payment",post, ["creditCard_number", "postage_info"]).
+path(_, entry, "http://www.amazon.com/api/", get, []).
+path(_, end, "http://www.amazon.com/api/", get, []).
 
 % next_state( INTENSION, STATE, SIGNATURE , NEXT_STATE)
 next_state(buyProduct, entry,"http://www.amazon.com/api/", search).
@@ -23,6 +25,10 @@ next_state(checkoutBasket, payment,"http://www.amazon.com/api/payment", end).
 next_state(browseBasket, entry,"http://www.amazon.com/api/", basket).
 next_state(browseBasket, basket,"http://www.amazon.com/api/basket", end).
 
+valid_intension(buyProduct).
+valid_intension(browseProduct).
+valid_intension(browseBasket).
+valid_intension(checkoutBasket).
 
 status_code("http://www.amazon.com/api/product", 200).
 status_code("http://www.amazon.com/api/basket", 200).
