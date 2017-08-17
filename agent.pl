@@ -46,7 +46,7 @@ traverse(browseProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_
 																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]),
  																								  getGraph(URL), path(_, search, Request, _, _),
 																									complete_action(browseProduct, search, Request, ProductId).
-traverse(browseBasket, Store, _, Value) :- nl, write("eimai sto traverse in the borowseBasket"), getGraph(Store),path(browseBasket, basket, Request,_, _),
+traverse(browseBasket, [Store], _, Value) :- nl, write("eimai sto traverse in the browseBasket"),nl, write(Store), write(Value), getGraph(Store),path(browseBasket, basket, Request,_,_),
  																								  complete_action(browseBasket, basket, Request, Value).
 
 fix_parameters(["usename", "password"], _).
