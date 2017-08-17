@@ -36,6 +36,8 @@ agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), valid_
 
 
 % add productId to search by it (more than 1 product may be available at the same store)
+traverse(buyProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
+traverse(browseProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
 traverse(buyProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], ProductList),write(ProductList), nl,
 																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]),
 																									getGraph(URL), path(_, search, Request, _, _),
