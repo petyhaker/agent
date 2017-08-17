@@ -48,7 +48,9 @@ traverse(browseProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_
 																									complete_action(browseProduct, search, Request, ProductId).
 traverse(browseBasket, [Store], _, Value) :- nl, write("eimai sto traverse in the browseBasket"),nl, write(Store), write(Value), getGraph(Store),path(browseBasket, basket, Request,_,_),
  																								  complete_action(browseBasket, basket, Request, Value).
-
+traverse(checkoutBasket, [Store], _, Value) :- nl, write("eimai sto traverse in the browseBasket"),nl, write(Store), write(Value), getGraph(Store),path(browseBasket, basket, Request,_,_),
+																									complete_action(browseBasket, basket, Request, Value).
+																									
 fix_parameters(["usename", "password"], _).
 fix_parameters(["productId"], _).
 fix_parameters(["basketId"], _).
