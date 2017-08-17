@@ -1,6 +1,7 @@
 {
     "@context": "http://schema.org",
     "@type": "Product",
+    "productId": "foo",
     "description": " lsgoiesg",
     "image": "foo",
     "name":"Moby Dick",

@@ -5,8 +5,8 @@ path(_ , search, "http://www.amazon.com/api/search",get, ["name"]).
 path(_, product, "http://www.amazon.com/api/product",get, ["productId"]).
 path(_, checkout, "http://www.amazon.com/api/checkout",get, ["basketId"]).
 path(_, payment, "http://www.amazon.com/api/payment",post, ["creditCard_number", "postage_info"]).
-path(_, entry, "http://www.amazon.com/api/", get, []).
-path(_, end, "http://www.amazon.com/api/", get, []).
+path(_, entry, "http://www.amazon.com/api/", get, "").
+path(_, end, "http://www.amazon.com/api/", get, "").
 
 % next_state( INTENSION, STATE, SIGNATURE , NEXT_STATE)
 next_state(buyProduct, entry,"http://www.amazon.com/api/", search).
