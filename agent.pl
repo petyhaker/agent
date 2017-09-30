@@ -20,37 +20,36 @@ traverse_verification(Intension, Request, State) :- path(Intension, State, Reque
 
 % starting point
 % agent(INTENSION, SCOPE, SEARCHBY, Value)
-agent(Intension, all, SearchBy, Value) :- input('database/trusted_stores.txt', Stores), write(Stores),agent_inner(Intension, Stores, SearchBy, Value, []).
+agent(Intension, all, SearchBy, Value) :- input('database/trusted_stores.txt', Stores), agent_inner(Intension, Stores, SearchBy, Value, []).
 agent(Intension, Scope, SearchBy, Value) :- agent_inner(Intension, Scope, SearchBy, Value, []).
 
 % the starting function "agent" calls this one to filter the stores
 % agent_inner(INTENSION, SCOPE, SEARCHBY, Value, ACCUMULATOR)
-agent_inner(Intension, [end_of_file], Parameter,  Value, ValidStores) :-  write(Parameter), write(Value), write(ValidStores), traverse(Intension, ValidStores, Parameter, Value). 									% return list of valid stores
-agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), not( valid_intension(Intension) ),write("am i blue?"),		% if it is not a valid intension for the store exclude it
+agent_inner(Intension, [end_of_file], Parameter,  Value, ValidStores) :-  traverse(Intension, ValidStores, Parameter, Value). 									% return list of valid stores
+agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), not( valid_intension(Intension) ),	% if it is not a valid intension for the store exclude it
 																														agent_inner(Intension, Stores, Parameter, Value, Acc).
 agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), valid_intension(Intension), 	 			% if the graph is not traversable exclude it
 																															not( traverse_verification(Intension, A, entry) ), write(" not valid graph "),
 	      																											agent_inner(Intension, Stores, Parameter, Value, Acc).
-agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), valid_intension(Intension), write(A),
-																														traverse_verification(Intension, A, entry), write("Store OK"), agent_inner(Intension, Stores, Parameter, Value, [A|Acc]).
+agent_inner(Intension, [A|Stores], Parameter, Value, Acc) :- getGraph(A), valid_intension(Intension),
+																														traverse_verification(Intension, A, entry),  agent_inner(Intension, Stores, Parameter, Value, [A|Acc]).
 
 
 % add productId to search by it (more than 1 product may be available at the same store)
-traverse(buyProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
-traverse(browseProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
-traverse(buyProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], ProductList),write(ProductList), nl,
-																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]),
+traverse(buyProduct, Stores, Parameter, Value) :- collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
+traverse(browseProduct, Stores, Parameter, Value) :- collect_prices(Stores, Parameter, Value, [], []), write("No items match your search").
+traverse(buyProduct, Stores, Parameter, Value) :-  collect_prices(Stores, Parameter, Value, [], ProductList),
+																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]), write(ProductID),write(" "), write(Price),write(" "), write(URL), nl,
 																									getGraph(URL), path(_, search, Request, _, _),
 																									complete_action(buyProduct, search, Request, ProductId).
-traverse(browseProduct, Stores, Parameter, Value) :- nl, write(Stores), collect_prices(Stores, Parameter, Value, [], ProductList),write(ProductList), nl,
-																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]),
+traverse(browseProduct, Stores, Parameter, Value) :- collect_prices(Stores, Parameter, Value, [], ProductList),
+																									predsort(compareAvg, ProductList, [[Price, URL, ProductID]|SortedList]),write(ProductID),write(" "), write(Price),write(" "), write(URL), nl,
  																								  getGraph(URL), path(_, search, Request, _, _),
 																									complete_action(browseProduct, search, Request, ProductId).
-traverse(browseBasket, [Store], _, Value) :- nl, write("eimai sto traverse in the browseBasket"),nl, write(Store), write(Value), getGraph(Store),path(browseBasket, basket, Request,_,_),
+traverse(browseBasket, [Store], _, Value) :-  getGraph(Store),path(browseBasket, basket, Request,_,_),
  																								  complete_action(browseBasket, basket, Request, Value).
-traverse(checkoutBasket, [Store], _, Value) :- nl, write("eimai sto traverse in the browseBasket"),nl, write(Store), write(Value), getGraph(Store),path(browseBasket, basket, Request,_,_),
-																									complete_action(browseBasket, basket, Request, Value).
-																									
+traverse(checkoutBasket, [Store], _, Value) :- getGraph(Store),path(checkoutBasket, basket, Request,_,_),
+																									 complete_action(browseBasket, basket, Request, Value).
 fix_parameters(["usename", "password"], _).
 fix_parameters(["productId"], _).
 fix_parameters(["basketId"], _).
@@ -63,9 +62,9 @@ http_request("http://www.amazon.com/api/checkout", _, 200, ["verysecurecardid", 
 http_request("http://www.amazon.com/api/payment", _, 200, "receiptid").
 
 complete_action(_, end, _, _).
-complete_action(Intension, State, Request, Values) :- next_state(Intension, State, Request, NextState), path(Intension, NextState, NextRequest, NextMethod, Parameters),write(Parameters),
-																											fix_parameters(Parameters, Values), http_request(NextRequest, NextMethod, Status_Code, Response),write(Response), status_code(Request, Status_Code),
-																											write(NextState),write(Values), nl, complete_action(Intension, NextState, NextRequest, Response).
+complete_action(Intension, State, Request, Values) :- next_state(Intension, State, Request, NextState), path(Intension, NextState, NextRequest, NextMethod, Parameters),
+																											fix_parameters(Parameters, Values), http_request(NextRequest, NextMethod, Status_Code, Response), status_code(Request, Status_Code),
+																											complete_action(Intension, NextState, NextRequest, Response).
 
 
 
